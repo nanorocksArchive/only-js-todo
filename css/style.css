@@ -35,3 +35,11 @@
     color: rgb(250, 157, 60);
     background-color: transparent
 }
+
+.line-through {
+    text-decoration: line-through;
+}
+
+.line-through-none{
+    text-decoration: none;
+}

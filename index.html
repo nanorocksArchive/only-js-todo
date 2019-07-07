@@ -48,124 +48,14 @@
                             <h2 class="text-center">New Todo</h2>
                             <form class="m-0">
                                 <div class="input-group">
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" id="task-add-input">
                                     <div class="input-group-append">
-                                        <button class="btn main-color-btn" type="button">ADD</button>
+                                        <button class="btn main-color-btn" type="button" id="task-add-btn">ADD</button>
                                     </div>
                                 </div>
                             </form>
                             <table class="table">
-                                <tbody>
-                                <tr>
-                                    <th scope="row" class="border-top-0 align-middle">
-                                        1
-                                    </th>
-                                    <td class="border-top-0 align-middle">
-                                        Eat pizza
-                                    </td>
-                                    <td class="text-right border-top-0">
-                                        <div class="btn-group m-0" role="group" aria-label="Basic example">
-                                            <button type="button" class="btn btn-outline-success btn-sm m-1">&#10004;</button>
-                                            <button type="button" class="btn btn-outline-dark btn-sm m-1">&#10006;</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row" class="align-middle">2</th>
-                                    <td class="align-middle">
-                                        Wash car
-                                    </td>
-                                    <td class="text-right">
-                                        <div class="btn-group m-0" role="group" aria-label="Basic example">
-                                            <button type="button" class="btn btn-outline-success btn-sm m-1">&#10004;</button>
-                                            <button type="button" class="btn btn-outline-dark btn-sm m-1">&#10006;</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row" class="align-middle">3</th>
-                                    <td class="align-middle">
-                                        Go to work
-                                    </td>
-                                    <td class="text-right">
-                                        <div class="btn-group m-0" role="group" aria-label="Basic example">
-                                            <button type="button" class="btn btn-outline-success btn-sm m-1">&#10004;</button>
-                                            <button type="button" class="btn btn-outline-dark btn-sm m-1">&#10006;</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row" class="align-middle">4</th>
-                                    <td class="align-middle">
-                                        Wash car
-                                    </td>
-                                    <td class="text-right">
-                                        <div class="btn-group m-0" role="group" aria-label="Basic example">
-                                            <button type="button" class="btn btn-outline-success btn-sm m-1">&#10004;</button>
-                                            <button type="button" class="btn btn-outline-dark btn-sm m-1">&#10006;</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row" class="align-middle">5</th>
-                                    <td class="align-middle">
-                                        Go to work
-                                    </td>
-                                    <td class="text-right">
-                                        <div class="btn-group m-0" role="group" aria-label="Basic example">
-                                            <button type="button" class="btn btn-outline-success btn-sm m-1">&#10004;</button>
-                                            <button type="button" class="btn btn-outline-dark btn-sm m-1">&#10006;</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row" class="align-middle">6</th>
-                                    <td class="align-middle">
-                                        Wash car
-                                    </td>
-                                    <td class="text-right">
-                                        <div class="btn-group m-0" role="group" aria-label="Basic example">
-                                            <button type="button" class="btn btn-outline-success btn-sm m-1">&#10004;</button>
-                                            <button type="button" class="btn btn-outline-dark btn-sm m-1">&#10006;</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row" class="align-middle">7</th>
-                                    <td class="align-middle">
-                                        Go to work
-                                    </td>
-                                    <td class="text-right">
-                                        <div class="btn-group m-0" role="group" aria-label="Basic example">
-                                            <button type="button" class="btn btn-outline-success btn-sm m-1">&#10004;</button>
-                                            <button type="button" class="btn btn-outline-dark btn-sm m-1">&#10006;</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row" class="align-middle">8</th>
-                                    <td class="align-middle">
-                                        Wash car
-                                    </td>
-                                    <td class="text-right">
-                                        <div class="btn-group m-0" role="group" aria-label="Basic example">
-                                            <button type="button" class="btn btn-outline-success btn-sm m-1">&#10004;</button>
-                                            <button type="button" class="btn btn-outline-dark btn-sm m-1">&#10006;</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row" class="align-middle">9</th>
-                                    <td class="align-middle">
-                                        Go to work
-                                    </td>
-                                    <td class="text-right">
-                                        <div class="btn-group m-0" role="group" aria-label="Basic example">
-                                            <button type="button" class="btn btn-outline-success btn-sm m-1">&#10004;</button>
-                                            <button type="button" class="btn btn-outline-dark btn-sm m-1">&#10006;</button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <tbody id="content-task-data">
                                 </tbody>
                             </table>
                         </div>
