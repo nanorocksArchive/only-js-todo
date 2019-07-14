@@ -1,184 +1,228 @@
-window.onload = function (e) {
+$(document).ready(function () {
 
-    var options = {
-        chart: {
-            type: 'bar'
-        },
-        series: [{
-            name: 'Tasks from Todo List',
-            data: [30,91,125]
-        }],
-        xaxis: {
-            categories: [1991, 1998,1999]
-        },
-        fill: {
-            colors: ['rgb(250, 162, 28)']
-        }
+    Storage.prototype.setObject = function (key, value) {
+        this.setItem(key, JSON.stringify(value));
     };
 
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
+    Storage.prototype.getObject = function (key) {
+        var value = this.getItem(key);
+        return value && JSON.parse(value);
+    };
 
-    // Date for tasks
-    function DateTask(){
-
-        this.getTodayDate = function () {
-            d = new Date();
-            return d.getDay() + '-' + parseInt(d.getMonth() + 1) + '-' + d.getFullYear();
-        };
-
-        this.compareDates = function (date) {
-            let splitDate = date.split('-');
-            let dateString = splitDate[0] + '-' + splitDate[1] + '-' + splitDate[2];
-            return dateString === this.getTodayDate();
-        };
-
+    // Format date
+    function formatDate(date) {
+        var dd = date.getDate();
+        var mm = date.getMonth() + 1;
+        var yyyy = date.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+        date = dd + '-' + mm + '-' + yyyy;
+        return date
     }
 
-    // Model for tasks
-    function Task(name, date, check){
-        this.nameTask = name;
-        this.dateTask = date;
-        this.isCheck = check;
+    // Get array from last 3 days.
+    function last3Days() {
+        var result = [];
+        for (var i = 0; i < 3; i++) {
+
+            var d = new Date();
+            d.setDate(d.getDate() - i);
+            result.push(formatDate(d))
+        }
+
+        return (result);
     }
 
-    // Model for view tasks
-    function ViewTasks(tasks){
 
-        this.taskList = tasks;
+    // Return today date
+    function dateNow() {
+        let date = new Date();
+        return formatDate(date);
+    }
 
-        this.viewModelTasks = function(view){
+    // Load all tasks
+    function loadTasks() {
 
-            let content = `<h5 class="text-center p-3 text-justify bg-light">No todo's in list for today.</h5>`;
+        $('#chart').html('');
 
-            // If there is no tasks yet
-            if(Object.keys(this.taskList).length <= 0)
+        let view = $('#content-task-data');
+        let content = '';
+        let tasks = localStorage.getObject('tasks');
+        tasks = (tasks == null) ? {} : tasks;
+        let len = Object.keys(tasks).length;
+
+        // clear view
+
+        if (len <= 0) {
+            content = `<h5 class="text-center p-3 text-justify bg-light">No todo's in list for today.</h5>`;
+            view.html(content);
+            return -1;
+        }
+
+        let days = last3Days();
+        let countOne, countTwo, countThree;
+        countOne = countTwo = countThree = 0;
+
+        for(let i = 0; i < len; i++)
+        {
+            let dateTask = tasks[i].date;
+
+            console.log(days[0], dateTask);
+            if (days[0] === dateTask) {
+                countOne++;
+            } else if (days[1] === dateTask) {
+                countTwo++;
+            } else if (days[2] === dateTask) {
+                countThree++;
+            }
+        }
+
+        for (let i = 0; i < len; i++) {
+
+            if(tasks[i].date !== dateNow())
             {
-                view.innerHTML = content;
-                return -1;
+                continue;
             }
 
-            content = '';
-            for(let ind=0; ind<Object.keys(this.taskList).length; ind++){
+            let checkTask = tasks[i].check;
+            let dateTask = tasks[i].date;
+            let nameTask = tasks[i].name;
 
-                d = new DateTask();
-                let dateTask = this.taskList[ind].dateTask;
-                let nameTask = this.taskList[ind].nameTask;
-                let checkTask = this.taskList[ind].isCheck;
-
-                if( !d.compareDates(this.taskList[ind].dateTask) ){
-                    continue;
-                }
-
-                content += `  
+            content += `  
                     <tr>
                         <th scope="row" class="border-top-0 align-middle">
-                            ${ ind + 1 }
+                            <strong>${i + 1}</strong>
                         </th>
                         <td class="border-top-0 align-middle">
-                            <span class="${ checkTask }">${ nameTask }</span>
-                            <input type="text" class="task-date float-right" value="${ dateTask }">
+                            <span class="${checkTask}" data-bind-date="${dateTask}" id="task-name">${nameTask}</span>
                         </td>
                         <td class="text-right border-top-0">
                             <div class="btn-group m-0" role="group">
                                 <button type="button" class="btn btn-outline-dark btn-sm m-1 check-task-btn">&#10004;</button>
-                                <button type="button" class="btn btn-outline-dark btn-sm m-1 delete-task-btn" onclick="">&#10006;</button>
+                                <button type="button" class="btn btn-outline-dark btn-sm m-1 delete-task-btn">&#10006;</button>
                             </div>
                         </td>
                     </tr>
                     `;
-            }
-
-            if(content === '')
-            {
-                content = `<h5 class="text-center p-3 text-justify bg-light">No todo's in list for today.</h5>`;
-                view.innerHTML = content;
-                return -1;
-            }
-
-            view.innerHTML = content;
-        };
-
-    }
-
-
-    // ON LOAD --------------------------------------
-
-    // Data
-    let tasks = {
-        0: {
-            name: 'Eat Pizza',
-            date: '6-7-2019',
-            check: 'line-through'
-        },
-        1: {
-            name: 'Watch Tv',
-            date: '29-2-2019',
-            check: 'line-through-none'
-        },
-        2: {
-            name: 'Programming',
-            date: '28-2-2019',
-            check: 'line-through'
         }
-    };
 
-    let taskList = [];
-
-    for(let i = 0; i < Object.keys(tasks).length; i ++)
-    {
-        let taskName = tasks[i].name;
-        let taskDate = tasks[i].date;
-        let taskCheck = tasks[i].check;
-
-        taskList.push(new Task(taskName, taskDate, taskCheck));
-    }
-
-    tasksModel = new ViewTasks(taskList);
-
-    // load data in view
-    let view = document.getElementById('content-task-data');
-
-    // Add task to task list
-    let taskAddBtn = document.getElementById('task-add-btn');
-
-    taskAddBtn.addEventListener('click', function (e) {
-
-        let input = document.getElementById('task-add-input');
-        let taskName = input.value;
-
-        if(taskName.trim().length <= 0)
-        {
-            input.placeholder = 'Enter valid todo!!!';
-            input.value = '';
+        if (content === '') {
+            content = `<h5 class="text-center p-3 text-justify bg-light">No todo's in list for today.</h5>`;
+            view.html(content);
             return -1;
         }
 
-        input.value = '';
+        view.html(content);
 
-        let date = new DateTask();
-        let taskDate = date.getTodayDate();
+        var options = {
+            chart: {
+                type: 'bar'
+            },
+            series: [{
+                name: 'Tasks from Todo List',
+                data: [countOne, countTwo, countThree],
+                colors: ['rgb(250, 162, 28)']
+            }],
+            xaxis: {
+                categories: last3Days()
+            },
+            fill: {
+                colors: ['rgb(250, 162, 28)']
+            }
+        };
 
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+
+    }
+
+    // Add task to task list
+    $('#task-add-btn').on('click', function (e) {
+
+        let input = $('#task-add-input');
+        let taskName = input.val();
+
+        if (taskName.trim().length <= 0) {
+            input.attr('placeholder', 'Enter valid todo!!!');
+            input.val('');
+            return -1;
+        }
+
+        input.val('');
+
+        let taskDate = dateNow();
         let taskCheck = 'line-through-none';
 
-        taskList.unshift(new Task(taskName, taskDate, taskCheck));
-        tasksModel.viewModelTasks(view);
+        let task = {
+            'name': taskName,
+            'date': taskDate,
+            'check': taskCheck
+        };
 
+        let data = localStorage.getObject('tasks');
+
+        if (data == null) {
+            localStorage.setObject('tasks', []);
+            data = localStorage.getObject('tasks');
+        }
+
+        data.push(task);
+        localStorage.setObject('tasks', data);
+
+        loadTasks();
+    });
+
+    $(document).on('click', '.delete-task-btn', function () {
+
+        let span = $(this).parent().parent().parent().find('span');
+        let ind = parseInt($(this).parent().parent().parent().find('strong').text()) - 1;
+
+        let data = localStorage.getObject('tasks');
+
+        data.splice(ind, 1);
+        localStorage.setObject('tasks', data);
+
+        loadTasks();
     });
 
 
+    $(document).on('click', '.check-task-btn', function () {
 
-    let deleteBtns = document.getElementsByClassName('delete-task-btn');
+        let span = $(this).parent().parent().parent().find('span');
+        let ind = parseInt($(this).parent().parent().parent().find('strong').text()) - 1;
 
-    function deleteTask(obj) {
-        alert(1);
-    }
+        let data = localStorage.getObject('tasks');
 
-    for(let i = 0; i < deleteBtns.length; i++)
-    {
-        console.log('aaaa', deleteBtns[i]);
-        deleteBtns[i].addEventListener('click', deleteTask(this), false);
-    }
+        if (span.attr('class') === 'line-through') {
+            span.removeClass('line-through');
+            span.addClass('line-through-none');
+            data[ind].check = 'line-through-none';
+        } else {
+            span.removeClass('line-through-none');
+            span.addClass('line-through');
+            data[ind].check = 'line-through';
+        }
 
-    tasksModel.viewModelTasks(view);
-};
+        localStorage.setObject('tasks', data);
+    });
+
+    // Clear history data
+    $(document).on('click', '#task-clear-history-btn', function () {
+
+        let msg = confirm('Are you sure ? ');
+
+        if (!msg) {
+            return -1;
+        }
+
+        localStorage.setObject('tasks', []);
+        loadTasks();
+    });
+
+    // On page load load all tasks
+    loadTasks();
+});
