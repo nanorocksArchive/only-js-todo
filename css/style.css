@@ -43,3 +43,10 @@
 .line-through-none{
     text-decoration: none;
 }
+
+#task-name{
+    font-size: 18px !important;
+    font-weight: bolder;
+    color: rgb(250, 126, 18);
+
+}
