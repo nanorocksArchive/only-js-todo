@@ -38,10 +38,14 @@
 
 .line-through {
     text-decoration: line-through;
+    font-weight: lighter !important;
+    color: #4e555b !important;
+    text-transform: capitalize;
 }
 
 .line-through-none{
     text-decoration: none;
+    text-transform: capitalize;
 }
 
 #task-name{
