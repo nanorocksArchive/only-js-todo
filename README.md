@@ -1,7 +1,10 @@
 # My-Todo
 
-######Plan every day with nice todo list. ;)
+`Plan every day with nice todo list. ;)`
 
-- You can have history from your 2 last days
-- jQuery project
-- local storage setup
+- You can have history from your last 2 days
+- JQuery project
+- Local storage setup
+
+### Cordova export
+ - Android 
