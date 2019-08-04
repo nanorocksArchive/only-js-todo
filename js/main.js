@@ -66,8 +66,7 @@ $(document).ready(function () {
         let countOne, countTwo, countThree;
         countOne = countTwo = countThree = 0;
 
-        for(let i = 0; i < len; i++)
-        {
+        for (let i = 0; i < len; i++) {
             let dateTask = tasks[i].date;
 
             //console.log(days[0], dateTask);
@@ -84,8 +83,7 @@ $(document).ready(function () {
 
         for (let i = 0; i < len; i++) {
 
-            if(tasks[i].date !== dateNow())
-            {
+            if (tasks[i].date !== dateNow()) {
                 continue;
             }
 
@@ -147,8 +145,7 @@ $(document).ready(function () {
     loadTasks();
 
 
-    function triggerAddTask()
-    {
+    function triggerAddTask() {
         let input = $('#task-add-input');
         let taskName = input.val();
 
@@ -182,10 +179,10 @@ $(document).ready(function () {
         loadTasks();
     }
 
-    $('#task-add-input').keypress(function(event){
+    $('#task-add-input').keypress(function (event) {
 
         let keycode = (event.keyCode ? event.keyCode : event.which);
-        if(keycode == '13'){
+        if (keycode == '13') {
             event.preventDefault();
             triggerAddTask();
         }
@@ -254,23 +251,16 @@ $(document).ready(function () {
         let len = Object.keys(tasks).length;
         let dateTask = null;
         let newTasks = [];
-        for(let i = 0; i < len; i++)
-        {
+        for (let i = 0; i < len; i++) {
             dateTask = tasks[i].date;
 
-            if (days[0] === dateTask)
-            {
+            if (days[0] === dateTask) {
                 newTasks.push(tasks[i]);
-            }
-            else if (days[1] === dateTask)
-            {
+            } else if (days[1] === dateTask) {
                 newTasks.push(tasks[i]);
-            }
-            else if (days[2] === dateTask)
-            {
+            } else if (days[2] === dateTask) {
                 newTasks.push(tasks[i]);
-            }
-            else{
+            } else {
                 continue;
             }
 
@@ -278,7 +268,7 @@ $(document).ready(function () {
 
         localStorage.setObject('tasks', newTasks);
 
-        console.log('Clean up history complete.');
+        //console.log('Clean up history complete.');
     }, 2000);
 
 });
