@@ -52,5 +52,16 @@
     font-size: 18px !important;
     font-weight: bolder;
     color: rgb(250, 126, 18);
+}
 
+.apexcharts-menu-icon{
+    display: none;
+}
+
+.apexcharts-svg{
+    //min-width: 400px !important;
+}
+
+#select-date{
+    text-align: center;
 }

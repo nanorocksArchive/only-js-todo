@@ -37,7 +37,6 @@ $(document).ready(function () {
         return (result);
     }
 
-
     // Return today date
     function dateNow() {
         let date = new Date();
@@ -80,10 +79,10 @@ $(document).ready(function () {
         }
 
         //console.log(countOne, countTwo, countThree);
-
+        let flag = 1;
         for (let i = 0; i < len; i++) {
 
-            if (tasks[i].date !== dateNow()) {
+            if (tasks[i].date != dateNow()) {
                 continue;
             }
 
@@ -94,7 +93,7 @@ $(document).ready(function () {
             content += `  
                     <tr>
                         <th scope="row" class="border-top-0 align-middle">
-                            <strong>${i + 1}</strong>
+                            <strong>${flag++}</strong>
                         </th>
                         <td class="border-top-0 align-middle">
                             <span class="${checkTask}" data-bind-date="${dateTask}" id="task-name">${nameTask}</span>
@@ -116,6 +115,64 @@ $(document).ready(function () {
         }
 
         view.html(content);
+
+        renderChart(countOne, countTwo, countThree);
+
+    }
+
+    function loadTasksByDate(day) {
+
+        let view = $('#content-task-data');
+        let content = '';
+        let tasks = localStorage.getObject('tasks');
+        tasks = (tasks == null) ? {} : tasks;
+        let len = Object.keys(tasks).length;
+
+        // clear view
+        if (len <= 0) {
+            content = `<h5 class="text-center p-3 text-justify bg-light">No todo's in list for today.</h5>`;
+            view.html(content);
+            return -1;
+        }
+        let flag = 1;
+        for (let i = 0; i < len; i++) {
+
+            if (tasks[i].date !== day) {
+                continue;
+            }
+
+            let checkTask = tasks[i].check;
+            let dateTask = tasks[i].date;
+            let nameTask = tasks[i].name;
+
+            content += `  
+                    <tr>
+                        <th scope="row" class="border-top-0 align-middle">
+                            <strong>${flag++}</strong>
+                        </th>
+                        <td class="border-top-0 align-middle">
+                            <span class="${checkTask}" data-bind-date="${dateTask}" id="task-name">${nameTask}</span>
+                        </td>
+                        <td class="text-right border-top-0">
+                            <div class="btn-group m-0" role="group">
+                                <button type="button" class="btn btn-outline-dark btn-sm m-1 check-task-btn">&#10004;</button>
+                                <button type="button" class="btn btn-outline-dark btn-sm m-1 delete-task-btn">&#10006;</button>
+                            </div>
+                        </td>
+                    </tr>
+                    `;
+        }
+
+        if (content === '') {
+            content = `<h5 class="text-center p-3 text-justify bg-light">No todo's in list for today.</h5>`;
+            view.html(content);
+            return -1;
+        }
+
+        view.html(content);
+    }
+
+    function renderChart(countOne, countTwo, countThree) {
 
         var options = {
             chart: {
@@ -139,11 +196,7 @@ $(document).ready(function () {
 
         var chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
-
     }
-
-    loadTasks();
-
 
     function triggerAddTask() {
         let input = $('#task-add-input');
@@ -183,6 +236,7 @@ $(document).ready(function () {
 
         let keycode = (event.keyCode ? event.keyCode : event.which);
         if (keycode == '13') {
+            $('#select-date').val(dateNow());
             event.preventDefault();
             triggerAddTask();
         }
@@ -191,6 +245,7 @@ $(document).ready(function () {
     // Add task to task list
     $('#task-add-btn').on('click', function (e) {
         triggerAddTask();
+        $('#select-date').val(dateNow());
     });
 
     $(document).on('click', '.delete-task-btn', function () {
@@ -205,7 +260,6 @@ $(document).ready(function () {
 
         loadTasks();
     });
-
 
     $(document).on('click', '.check-task-btn', function () {
 
@@ -240,9 +294,6 @@ $(document).ready(function () {
         loadTasks();
     });
 
-    // On page load load all tasks
-    loadTasks();
-
     setTimeout(function () {
         // clean up
         let days = last3Days();
@@ -270,5 +321,25 @@ $(document).ready(function () {
 
         //console.log('Clean up history complete.');
     }, 2000);
+
+    function loadDaysInSelect() {
+        let options = '';
+        let days = last3Days();
+        for(let i = 0; i < days.length; i++)
+        {
+            options += `<option value="${days[i]}">${days[i]}</option>`;
+        }
+
+        $('#select-date').html(options);
+    }
+
+    $('#select-date').on('change', function () {
+        let day = $(this).val();
+        loadTasksByDate(day);
+    });
+
+    // On page load load all tasks
+    loadTasks();
+    loadDaysInSelect();
 
 });
