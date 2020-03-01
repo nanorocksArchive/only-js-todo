@@ -5,6 +5,3 @@
 - You can have history from your last 2 days
 - JQuery project
 - Local storage setup
-
-### Cordova export
- - Android 

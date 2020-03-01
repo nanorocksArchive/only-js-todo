@@ -79,6 +79,11 @@ $(document).ready(function () {
         }
 
         //console.log(countOne, countTwo, countThree);
+        if((countOne == 0 && countTwo != 1) || countTwo == 0)
+        {
+
+        }
+
         let flag = 1;
         for (let i = 0; i < len; i++) {
 
@@ -89,6 +94,7 @@ $(document).ready(function () {
             let checkTask = tasks[i].check;
             let dateTask = tasks[i].date;
             let nameTask = tasks[i].name;
+            let idTask = tasks[i].id;
 
             content += `  
                     <tr>
@@ -100,8 +106,8 @@ $(document).ready(function () {
                         </td>
                         <td class="text-right border-top-0">
                             <div class="btn-group m-0" role="group">
-                                <button type="button" class="btn btn-outline-dark btn-sm m-1 check-task-btn">&#10004;</button>
-                                <button type="button" class="btn btn-outline-dark btn-sm m-1 delete-task-btn">&#10006;</button>
+                                <button type="button" class="btn btn-outline-dark btn-sm m-1 check-task-btn" data-id-task="${idTask}">&#10004;</button>
+                                <button type="button" class="btn btn-outline-dark btn-sm m-1 delete-task-btn" data-id-task="${idTask}">&#10006;</button>
                             </div>
                         </td>
                     </tr>
@@ -144,6 +150,7 @@ $(document).ready(function () {
             let checkTask = tasks[i].check;
             let dateTask = tasks[i].date;
             let nameTask = tasks[i].name;
+            let idTask = tasks[i].id;
 
             content += `  
                     <tr>
@@ -156,7 +163,7 @@ $(document).ready(function () {
                         <td class="text-right border-top-0">
                             <div class="btn-group m-0" role="group">
                                 <button type="button" class="btn btn-outline-dark btn-sm m-1 check-task-btn">&#10004;</button>
-                                <button type="button" class="btn btn-outline-dark btn-sm m-1 delete-task-btn">&#10006;</button>
+                                <button type="button" class="btn btn-outline-dark btn-sm m-1 delete-task-btn" data-id-task="${idTask}">&#10006;</button>
                             </div>
                         </td>
                     </tr>
@@ -214,6 +221,7 @@ $(document).ready(function () {
         let taskCheck = 'line-through-none';
 
         let task = {
+            'id' : parseInt(Math.random() * 10000),
             'name': taskName,
             'date': taskDate,
             'check': taskCheck
@@ -251,10 +259,9 @@ $(document).ready(function () {
     $(document).on('click', '.delete-task-btn', function () {
 
         let span = $(this).parent().parent().parent().find('span');
-        let ind = parseInt($(this).parent().parent().parent().find('strong').text()) - 1;
-
+        let ind = parseInt($(this).parent().parent().parent().find('strong').text());
+        console.log(span, ind);
         let data = localStorage.getObject('tasks');
-
         data.splice(ind, 1);
         localStorage.setObject('tasks', data);
 
@@ -263,8 +270,11 @@ $(document).ready(function () {
 
     $(document).on('click', '.check-task-btn', function () {
 
-        let span = $(this).parent().parent().parent().find('span');
-        let ind = parseInt($(this).parent().parent().parent().find('strong').text()) - 1;
+        let span = $(this).parent().parent().parent().find('#task-name');
+        let ind = parseInt($(this).parent().parent().parent().find('strong').text());
+        let id = $(this).attr('data-id-task');
+
+        console.log(span, ind, id);
 
         let data = localStorage.getObject('tasks');
 
@@ -278,7 +288,17 @@ $(document).ready(function () {
             data[ind].check = 'line-through';
         }
 
-        localStorage.setObject('tasks', data);
+        let len = Object.keys(data).length;
+        for(let i = 0; i < len; i++)
+        {
+            if(data[i]['id'] === id)
+            {
+
+            }
+        }
+
+
+        //localStorage.setObject('tasks', data);
     });
 
     // Clear history data
@@ -294,33 +314,33 @@ $(document).ready(function () {
         loadTasks();
     });
 
-    setTimeout(function () {
-        // clean up
-        let days = last3Days();
-        let tasks = localStorage.getObject('tasks');
-        tasks = (tasks == null) ? {} : tasks;
-        let len = Object.keys(tasks).length;
-        let dateTask = null;
-        let newTasks = [];
-        for (let i = 0; i < len; i++) {
-            dateTask = tasks[i].date;
-
-            if (days[0] === dateTask) {
-                newTasks.push(tasks[i]);
-            } else if (days[1] === dateTask) {
-                newTasks.push(tasks[i]);
-            } else if (days[2] === dateTask) {
-                newTasks.push(tasks[i]);
-            } else {
-                continue;
-            }
-
-        }
-
-        localStorage.setObject('tasks', newTasks);
-
-        //console.log('Clean up history complete.');
-    }, 2000);
+    // setTimeout(function () {
+    //     // clean up
+    //     let days = last3Days();
+    //     let tasks = localStorage.getObject('tasks');
+    //     tasks = (tasks == null) ? {} : tasks;
+    //     let len = Object.keys(tasks).length;
+    //     let dateTask = null;
+    //     let newTasks = [];
+    //     for (let i = 0; i < len; i++) {
+    //         dateTask = tasks[i].date;
+    //
+    //         if (days[0] === dateTask) {
+    //             newTasks.push(tasks[i]);
+    //         } else if (days[1] === dateTask) {
+    //             newTasks.push(tasks[i]);
+    //         } else if (days[2] === dateTask) {
+    //             newTasks.push(tasks[i]);
+    //         } else {
+    //             continue;
+    //         }
+    //
+    //     }
+    //
+    //     localStorage.setObject('tasks', newTasks);
+    //
+    //     //console.log('Clean up history complete.');
+    // }, 2000);
 
     function loadDaysInSelect() {
         let options = '';
