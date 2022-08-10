@@ -1,4 +1,4 @@
-# My-Todo
+# only-js-todo
 
 `Plan every day with nice todo list. ;)`
 
